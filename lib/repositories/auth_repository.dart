@@ -38,7 +38,8 @@ class AuthRepository {
       await _sessionBox.put('active_user_id', user.id);
       return user;
     } catch (e) {
-      print('DEBUG: Login failed. Error or no match: $e');
+      print('DEBUG: Login failed for $email. Error: $e');
+      print('DEBUG: Registered emails in box: ${_userBox.values.map((u) => u.email).toList()}');
       return null;
     }
   }

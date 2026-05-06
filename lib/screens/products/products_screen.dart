@@ -349,27 +349,77 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
                 value: product.stockPercentage,
                 status: product.status,
               ),
+              const SizedBox(height: 16),
 
-              const SizedBox(height: 10),
+              // ── Action Buttons ──
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Icon(
-                    Icons.swipe_rounded,
-                    size: 12,
-                    color: AppColors.textTertiary,
+                  _buildActionButton(
+                    icon: Icons.edit_outlined,
+                    label: 'Edit',
+                    color: AppColors.primary,
+                    onTap: () => _showAddProductSheet(editProduct: product),
                   ),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Swipe to edit or delete',
-                    style: GoogleFonts.inter(
-                      fontSize: 10,
-                      color: AppColors.textTertiary,
-                    ),
+                  const SizedBox(width: 12),
+                  _buildActionButton(
+                    icon: Icons.delete_outline_rounded,
+                    label: 'Delete',
+                    color: AppColors.critical,
+                    onTap: () async {
+                      final confirmed = await _confirmDelete(product);
+                      if (confirmed) {
+                        ref.read(productProvider.notifier).deleteProduct(product.id);
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${product.productName} deleted'),
+                              backgroundColor: AppColors.critical,
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      }
+                    },
                   ),
                 ],
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: color.withOpacity(0.1)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: color),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: color,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -652,6 +702,7 @@ class _AddProductSheetState extends ConsumerState<_AddProductSheet> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
+    final notifier = ref.read(productProvider.notifier);
     await Future.delayed(const Duration(milliseconds: 500));
 
     final qty = int.tryParse(_qtyCtrl.text) ?? 0;
@@ -668,7 +719,7 @@ class _AddProductSheetState extends ConsumerState<_AddProductSheet> {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
-      await ref.read(productProvider.notifier).addProduct(product);
+      await notifier.addProduct(product);
     } else {
       final updated = widget.editProduct!.copyWith(
         productName: _nameCtrl.text.trim(),
@@ -678,7 +729,7 @@ class _AddProductSheetState extends ConsumerState<_AddProductSheet> {
         minimumThreshold: min,
         updatedAt: DateTime.now(),
       );
-      await ref.read(productProvider.notifier).updateProduct(updated);
+      await notifier.updateProduct(updated);
     }
 
     if (mounted) {

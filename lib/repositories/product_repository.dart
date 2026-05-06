@@ -29,11 +29,7 @@ class ProductRepository {
   }
 
   Future<void> deleteProduct(String id) async {
-    final key = _box.keys.firstWhere(
-      (k) => _box.get(k)?.id == id,
-      orElse: () => null,
-    );
-    if (key != null) await _box.delete(key);
+    await _box.delete(id);
   }
 
   Future<void> updateStock(String productId, int newQuantity) async {
