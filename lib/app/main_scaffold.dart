@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_theme.dart';
-import '../../features/dashboard/dashboard_screen.dart';
-import '../../features/products/products_screen.dart';
-import '../../features/updates/updates_screen.dart';
-import '../../features/history/history_screen.dart';
-import '../../features/search/search_screen.dart';
-import '../../shared/widgets/bottom_nav_bar.dart';
+import '../../screens/dashboard/dashboard_screen.dart';
+import '../../screens/products/products_screen.dart';
+import '../../screens/updates/updates_screen.dart';
+import '../../screens/history/history_screen.dart';
+import '../../screens/search/search_screen.dart';
+import '../../widgets/bottom_nav_bar.dart';
 
 class MainScaffold extends ConsumerStatefulWidget {
   const MainScaffold({super.key});

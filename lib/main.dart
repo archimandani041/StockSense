@@ -3,10 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/theme/app_theme.dart';
-import 'data/models/product.dart';
-import 'data/models/stock_transaction.dart';
-import 'data/repositories/product_repository.dart';
-import 'data/repositories/transaction_repository.dart';
+import 'models/product.dart';
+import 'models/stock_transaction.dart';
 import 'core/constants/app_constants.dart';
 import 'app/main_scaffold.dart';
 
@@ -36,31 +34,23 @@ void main() async {
   Hive.registerAdapter(StockTransactionAdapter());
 
   // Open Boxes
-  final productsBox = await Hive.openBox<Product>(AppConstants.productsBox);
-  final transactionsBox =
-      await Hive.openBox<StockTransaction>(AppConstants.transactionsBox);
-
-  // Seed data if empty
-  final productRepo = ProductRepository(productsBox);
-  await productRepo.seedDefaultProducts();
-
-  final txRepo = TransactionRepository(transactionsBox);
-  await txRepo.seedDefaultTransactions({'seed': 'dummy'});
+  await Hive.openBox<Product>(AppConstants.productsBox);
+  await Hive.openBox<StockTransaction>(AppConstants.transactionsBox);
 
   runApp(
     const ProviderScope(
-      child: StockSyncApp(),
+      child: StockSenseApp(),
     ),
   );
 }
 
-class StockSyncApp extends StatelessWidget {
-  const StockSyncApp({super.key});
+class StockSenseApp extends StatelessWidget {
+  const StockSenseApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'StockSync AI',
+      title: 'StockSense',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const MainScaffold(),

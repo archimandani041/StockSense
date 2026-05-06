@@ -1,5 +1,5 @@
-name: stocksync_ai
-description: StockSync AI — Smart Inventory & Stock Replenishment System
+name: stocksense
+description: StockSense — Smart Inventory & Stock Replenishment System
 publish_to: 'none'
 version: 1.0.0+1
 
