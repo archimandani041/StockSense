@@ -27,42 +27,52 @@ class AppBottomNavBar extends StatelessWidget {
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavItem(
-                icon: Icons.grid_view_rounded,
-                label: 'Dashboard',
-                isActive: currentIndex == 0,
-                onTap: () => onTap(0),
-              ),
-              _NavItem(
-                icon: Icons.inventory_2_outlined,
-                label: 'Products',
-                isActive: currentIndex == 1,
-                onTap: () => onTap(1),
-              ),
-              _NavItem(
-                icon: Icons.add_circle_outline_rounded,
-                label: 'Updates',
-                isActive: currentIndex == 2,
-                onTap: () => onTap(2),
-                isCenterAction: true,
-              ),
-              _NavItem(
-                icon: Icons.history_rounded,
-                label: 'History',
-                isActive: currentIndex == 3,
-                onTap: () => onTap(3),
-              ),
-              _NavItem(
-                icon: Icons.search_rounded,
-                label: 'Search',
-                isActive: currentIndex == 4,
-                onTap: () => onTap(4),
-              ),
-            ],
-          ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: _NavItem(
+                    icon: Icons.grid_view_rounded,
+                    label: 'Dashboard',
+                    isActive: currentIndex == 0,
+                    onTap: () => onTap(0),
+                  ),
+                ),
+                Expanded(
+                  child: _NavItem(
+                    icon: Icons.inventory_2_outlined,
+                    label: 'Products',
+                    isActive: currentIndex == 1,
+                    onTap: () => onTap(1),
+                  ),
+                ),
+                Expanded(
+                  child: _NavItem(
+                    icon: Icons.add_circle_outline_rounded,
+                    label: 'Updates',
+                    isActive: currentIndex == 2,
+                    onTap: () => onTap(2),
+                    isCenterAction: true,
+                  ),
+                ),
+                Expanded(
+                  child: _NavItem(
+                    icon: Icons.history_rounded,
+                    label: 'History',
+                    isActive: currentIndex == 3,
+                    onTap: () => onTap(3),
+                  ),
+                ),
+                Expanded(
+                  child: _NavItem(
+                    icon: Icons.search_rounded,
+                    label: 'Search',
+                    isActive: currentIndex == 4,
+                    onTap: () => onTap(4),
+                  ),
+                ),
+              ],
+            ),
         ),
       ),
     );

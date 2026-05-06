@@ -5,8 +5,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'core/theme/app_theme.dart';
 import 'models/product.dart';
 import 'models/stock_transaction.dart';
+import 'models/user.dart';
 import 'core/constants/app_constants.dart';
-import 'app/main_scaffold.dart';
+import 'screens/auth/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,10 +33,13 @@ void main() async {
   // Register Adapters
   Hive.registerAdapter(ProductAdapter());
   Hive.registerAdapter(StockTransactionAdapter());
+  Hive.registerAdapter(UserAdapter());
 
   // Open Boxes
   await Hive.openBox<Product>(AppConstants.productsBox);
   await Hive.openBox<StockTransaction>(AppConstants.transactionsBox);
+  await Hive.openBox<User>(AppConstants.usersBox);
+  await Hive.openBox(AppConstants.sessionBox);
 
   runApp(
     const ProviderScope(
@@ -53,7 +57,7 @@ class StockSenseApp extends StatelessWidget {
       title: 'StockSense',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const MainScaffold(),
+      home: const AuthWrapper(),
     );
   }
 }

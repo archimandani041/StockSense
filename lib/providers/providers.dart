@@ -2,8 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import '../models/product.dart';
 import '../models/stock_transaction.dart';
+import '../models/user.dart';
 import '../repositories/product_repository.dart';
 import '../repositories/transaction_repository.dart';
+import '../repositories/auth_repository.dart';
 import '../core/constants/app_constants.dart';
 import '../services/sync_service.dart';
 
@@ -11,6 +13,41 @@ import '../services/sync_service.dart';
 
 final syncServiceProvider = Provider<SyncService>((ref) {
   return SyncService();
+});
+
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final userBox = Hive.box<User>(AppConstants.usersBox);
+  final sessionBox = Hive.box(AppConstants.sessionBox);
+  return AuthRepository(userBox, sessionBox);
+});
+
+class AuthNotifier extends StateNotifier<bool> {
+  final AuthRepository _repo;
+
+  AuthNotifier(this._repo) : super(_repo.isLoggedIn);
+
+  Future<void> login(String email, String password) async {
+    final user = await _repo.login(email, password);
+    if (user != null) {
+      state = true;
+    } else {
+      throw Exception('Invalid email or password');
+    }
+  }
+
+  Future<void> signup(String name, String email, String password) async {
+    await _repo.signup(name, email, password);
+    state = true;
+  }
+
+  Future<void> logout() async {
+    await _repo.logout();
+    state = false;
+  }
+}
+
+final authProvider = StateNotifierProvider<AuthNotifier, bool>((ref) {
+  return AuthNotifier(ref.watch(authRepositoryProvider));
 });
 
 final productRepositoryProvider = Provider<ProductRepository>((ref) {

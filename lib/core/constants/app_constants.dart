@@ -2,6 +2,8 @@ class AppConstants {
   // Hive Box Names
   static const String productsBox = 'products_box';
   static const String transactionsBox = 'transactions_box';
+  static const String usersBox = 'users_box';
+  static const String sessionBox = 'session_box';
 
   // Categories
   static const List<String> categories = [
